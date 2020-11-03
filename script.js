@@ -54,17 +54,8 @@ function getForecasts(array){
     return forecasts
 }
 
-let index = 0
-
-$("#search").on("change keyup paste", function () {
-    
-    $(".active").addClass("d-none").removeClass("active")
-    let localization = $("#search").val();
-    let unit = "metric"
-    const API_KEY = '' 
-    const forecast = `https://api.openweathermap.org/data/2.5/forecast?q=${localization}&units=${unit}&appid=${API_KEY}`
-
-    $.get(forecast, function (res) {
+function getWeather(query){
+    $.get(query, function (res) {
         console.log(res)
        $("#forecast").removeClass("d-none")
        $("#navigation").removeClass("d-none").addClass("d-md-none ")
@@ -81,15 +72,26 @@ $("#search").on("change keyup paste", function () {
         $("#forecast").addClass("d-none")
         $("#navigation").removeClass("d-md-none").addClass("d-none")
     });
+}
 
+let index = 0
+const unit = "metric"
+const API_KEY = '' 
 
+$("#search").on("change keyup paste", function () {
+    
+    $(".active").addClass("d-none").removeClass("active")
+    let localization = $("#search").val();
+    const REQUEST = `https://api.openweathermap.org/data/2.5/forecast?q=${localization}&units=${unit}&appid=${API_KEY}`
+    getWeather(REQUEST)
 });
 
 $("#usingPosition").click(function () {
     if ("geolocation" in navigator){
 		navigator.geolocation.getCurrentPosition(function(position){ 
-				console.log("Found your location <br />Lat : "+position.coords.latitude+" </br>Lang :"+ position.coords.longitude);
-			});
+                const REQUEST = `https://api.openweathermap.org/data/2.5/forecast?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=${unit}&appid=${API_KEY}`
+                getWeather(REQUEST)
+            });
 	}else{
 		console.log("Browser doesn't support geolocation!");
 	}
