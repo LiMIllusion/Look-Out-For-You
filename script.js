@@ -7,7 +7,7 @@ $(document).ready(function () {
     $("#search").val("");
     $("#search").focus();
 });
-
+//funzione che setta la visibilità dell'icona del meteo
 function setWeather(weather, i){
     switch(weather){
         case "Clear":
@@ -23,12 +23,10 @@ function setWeather(weather, i){
             $(`.wt-${i}.flurries`).removeClass("d-none").addClass("active")
         default:
             $(`.wt-${i}.default`).removeClass("d-none").addClass("active")
-            //AAAAAAAAA 
-            //Qui stavo scapocciando, che ridere
             break
     }
 }
-
+//funzione che restituisce un oggetto con la media delle temperature, la data e il meteo attuale a partire dalla risposta del server
 function getForecasts(array){
     let forecasts = []
     for (let i = 0; i < array.length; i++) {
@@ -53,7 +51,7 @@ function getForecasts(array){
     }
     return forecasts
 }
-
+//funzione che effettua una query e inserisce i suoi risultati all'interno della pagina web
 function getWeather(query){
     $.get(query, function (res) {
         console.log(res)
@@ -78,14 +76,14 @@ let index = 0
 const unit = "metric"
 const API_KEY = '' 
 
+//la richiesta viene effettuata alla modifica del campo di ricerca
 $("#search").on("change keyup paste", function () {
-    
     $(".active").addClass("d-none").removeClass("active")
     let localization = $("#search").val();
     const REQUEST = `https://api.openweathermap.org/data/2.5/forecast?q=${localization}&units=${unit}&appid=${API_KEY}`
     getWeather(REQUEST)
 });
-
+//la richiesta viene effettuata al click del tasto di geocalizzazione
 $("#usingPosition").click(function () {
     if ("geolocation" in navigator){
 		navigator.geolocation.getCurrentPosition(function(position){ 
@@ -96,7 +94,7 @@ $("#usingPosition").click(function () {
 		console.log("Browser doesn't support geolocation!");
 	}
 })
-
+//funzioni per scorrere i le previsioni su mobile
 $("#next").click(function () {
     if (index < 4) {
         $(`#weather-${index}`).addClass("d-none").addClass("d-md-block")
